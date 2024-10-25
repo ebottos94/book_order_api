@@ -14,6 +14,8 @@ The First two endpoints return statistics about order book of a specific asset, 
 
 ## Run Project
 
+Create a ```.env``` file like ```.env_template```
+
 ```
 docker-compose up -d --build
 ```
