@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+  
+  backend:
+    build: 
+      context: ./backend
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - IS_TEST=0
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/code
+
+volumes:
+  mongo_data:
