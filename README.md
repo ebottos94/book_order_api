@@ -10,7 +10,7 @@ There are three endpoints to read data and statistics :
 
 -/api/book/all-stats/
 
-The First two endpoints return statistics about order book of specific asset, the last endpoint return general statistics about all assets present in the database.
+The First two endpoints return statistics about order book of a specific asset, the last endpoint return general statistics about all assets present in the database.
 
 ## Run Project
 
