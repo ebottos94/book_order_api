@@ -13,7 +13,7 @@ else:
 
 """
 Database connection. 
-If IS_TEST is not present in variable environment we use Mock db to test endpoints
+If IS_TEST is not present in environment variables we use Mock db to test endpoints
 """
 
 
