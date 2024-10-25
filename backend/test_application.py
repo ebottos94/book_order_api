@@ -39,3 +39,5 @@ def test_endpoints():
     for s in symbols:
         response = client.get(f"/api/book/asks-stats/{s}")
         assert response.status_code == 200
+        response = client.get(f"/api/book/bids-stats/{s}")
+        assert response.status_code == 200
