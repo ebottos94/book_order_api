@@ -21,7 +21,6 @@ services:
     environment:
       - MONGO_USERNAME=${MONGO_USERNAME}
       - MONGO_PASSWORD=${MONGO_PASSWORD}
-      - IS_TEST=0
     ports:
       - 8000:8000
     volumes:

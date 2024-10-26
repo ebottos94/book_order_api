@@ -2,27 +2,27 @@ from fastapi.testclient import TestClient
 import pytest
 from .main import app
 from .import_orders import get_orders
-from database.services import insert_book, get_all_orders, get_symbols, get_symbol_book
+from .database.services import insert_book, get_all_orders, get_symbols, get_symbol_book
+from .database.db import get_orders_collection
 from mongomock_motor import AsyncMongoMockClient
 
 
-def get_mock_collection():
+async def get_mock_collection():
     motor_client = AsyncMongoMockClient()
+    book = get_orders("BTC-GBP")
+    await insert_book(book, motor_client.orderdb.orders)
+    book = get_orders("BTC-EUR")
+    await insert_book(book, motor_client.orderdb.orders)
     return motor_client.orderdb.orders
 
 
+app.dependency_overrides[get_orders_collection] = get_mock_collection
 client = TestClient(app=app)
 
 
 @pytest.mark.asyncio
 async def test_db_operations():
-    orders_to_insert = get_orders("BTC-GBP")
-    collection = get_mock_collection()
-    await insert_book(book=orders_to_insert, collection=collection)
-    orders = await get_all_orders(collection=collection)
-    assert len(orders) == 1
-    orders_to_insert = get_orders("BTC-EUR")
-    await insert_book(book=orders_to_insert, collection=collection)
+    collection = await get_mock_collection()
     orders = await get_all_orders(collection=collection)
     assert len(orders) == 2
     symbols = await get_symbols(collection=collection)
@@ -34,7 +34,7 @@ async def test_db_operations():
 
 def test_endpoints():
     response = client.get("/api/book/all-stats/")
-    assert response.status_code == 200
+    assert len(response.json().keys()) == 2
     symbols = response.json().keys()
     for s in symbols:
         response = client.get(f"/api/book/asks-stats/{s}")

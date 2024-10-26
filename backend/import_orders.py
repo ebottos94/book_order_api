@@ -24,11 +24,6 @@ def validate_orders(orders: dict):
         raise e
 
 
-async def main(orders):
-    orders_collection = await get_orders_collection()
-    await insert_book(book=orders, collection=orders_collection)
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -46,4 +41,5 @@ if __name__ == "__main__":
         )
     orders = get_orders(symbol=symbol)
     validate_orders(orders=orders)
-    asyncio.run(main(orders=orders))
+    orders_collection = get_orders_collection()
+    asyncio.run(insert_book(book=orders, collection=orders_collection))

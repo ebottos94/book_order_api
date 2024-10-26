@@ -1,13 +1,14 @@
-from typing import Annotated, Any
+from typing import Annotated
 from fastapi import APIRouter, HTTPException, Depends
 from ..database.db import get_orders_collection
 from ..database.services import get_symbols, get_symbol_book, get_all_orders
 from ..database.schema import BidsResponseModel, AsksResponseModel
 from ..utils.stats import get_symbol_stats, get_global_stats
+from motor.motor_asyncio import AsyncIOMotorCollection
 
 router = APIRouter()
 
-OrderCollection = Annotated[Any, Depends(get_orders_collection)]
+OrderCollection = Annotated[AsyncIOMotorCollection, Depends(get_orders_collection)]
 
 """
 Bids stats endpoint
